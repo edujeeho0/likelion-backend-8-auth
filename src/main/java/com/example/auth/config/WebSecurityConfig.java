@@ -1,5 +1,6 @@
 package com.example.auth.config;
 
+import com.example.auth.filters.AllAuthenticatedFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 // @Bean을 비롯해서 여러 설정을 하기 위한 Bean 객체
@@ -67,6 +69,11 @@ public class WebSecurityConfig {
                         .logoutUrl("/users/logout")
                         // 로그아웃 성공시 이동할 페이지
                         .logoutSuccessUrl("/users/home")
+        )
+        // 특정 필터 앞에 나만의 필터를 넣는다.
+        .addFilterBefore(
+                new AllAuthenticatedFilter(),
+                AuthorizationFilter.class
         )
         ;
 
