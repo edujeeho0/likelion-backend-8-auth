@@ -62,7 +62,7 @@ public class WebSecurityConfig {
                         // (사용자의 세션을 삭제할지)
                         .logoutUrl("/users/logout")
                         // 로그아웃 성공시 이동할 페이지
-                        .logoutSuccessUrl("/users/login")
+                        .logoutSuccessUrl("/users/home")
         )
         ;
 
@@ -75,7 +75,7 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
+//    @Bean
     // 사용자 정보 관리 클래스
     public UserDetailsManager userDetailsManager(
         PasswordEncoder passwordEncoder
