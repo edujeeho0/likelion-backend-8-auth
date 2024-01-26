@@ -1,5 +1,6 @@
 package com.example.auth;
 
+import com.example.auth.entity.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -44,7 +45,9 @@ public class UserController {
     ) {
         model.addAttribute("username", authentication.getName());
         log.info(authentication.getName());
-        log.info(((User) authentication.getPrincipal()).getPassword());
+//        log.info(((User) authentication.getPrincipal()).getPassword());
+        log.info(((CustomUserDetails) authentication.getPrincipal()).getPassword());
+        log.info(((CustomUserDetails) authentication.getPrincipal()).getPhone());
         return "my-profile";
     }
 
@@ -64,8 +67,12 @@ public class UserController {
             String passwordCheck
     ) {
         if (password.equals(passwordCheck))
-            manager.createUser(User.withUsername(username)
+            /*manager.createUser(User.withUsername(username)
                     .password(passwordEncoder.encode(password))
+                    .build());*/
+            manager.createUser(CustomUserDetails.builder()
+                            .username(username)
+                            .password(passwordEncoder.encode(password))
                     .build());
 
         // 회원가입 성공 후 로그인 페이지로

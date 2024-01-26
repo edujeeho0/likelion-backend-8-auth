@@ -1,5 +1,6 @@
 package com.example.auth.service;
 
+import com.example.auth.entity.CustomUserDetails;
 import com.example.auth.entity.UserEntity;
 import com.example.auth.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,12 @@ public class JpaUserDetailsManager implements UserDetailsManager {
         createUser(User.withUsername("user2")
                 .password(passwordEncoder.encode("password2"))
                 .build());*/
+        createUser(CustomUserDetails.builder()
+                .username("user1")
+                .password(passwordEncoder.encode("password1"))
+                .email("user1@gmail.com")
+                .phone("01012345678")
+                .build());
     }
 
     @Override
@@ -44,9 +51,18 @@ public class JpaUserDetailsManager implements UserDetailsManager {
                 = userRepository.findByUsername(username);
         if (optionalUser.isEmpty())
             throw new UsernameNotFoundException(username);
-        return User.withUsername(username)
-                .password(optionalUser.get().getPassword())
+
+        UserEntity userEntity = optionalUser.get();
+        return CustomUserDetails.builder()
+                .username(userEntity.getUsername())
+                .password(userEntity.getPassword())
+                .email(userEntity.getEmail())
+                .phone(userEntity.getPhone())
                 .build();
+
+        /*return User.withUsername(username)
+                .password(optionalUser.get().getPassword())
+                .build();*/
     }
 
     @Override
@@ -54,11 +70,27 @@ public class JpaUserDetailsManager implements UserDetailsManager {
     public void createUser(UserDetails user) {
         if (userExists(user.getUsername()))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        UserEntity userEntity = UserEntity.builder()
+
+        try {
+            CustomUserDetails userDetails =
+                    (CustomUserDetails) user;
+            UserEntity newUser = UserEntity.builder()
+                    .username(userDetails.getUsername())
+                    .password(userDetails.getPassword())
+                    .email(userDetails.getEmail())
+                    .phone(userDetails.getPhone())
+                    .build();
+            userRepository.save(newUser);
+        } catch (ClassCastException e) {
+            log.error("Failed Cast to: {}", CustomUserDetails.class);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        /*UserEntity userEntity = UserEntity.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
                 .build();
-        userRepository.save(userEntity);
+        userRepository.save(userEntity);*/
     }
 
     @Override
