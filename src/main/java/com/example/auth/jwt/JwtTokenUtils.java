@@ -47,7 +47,7 @@ public class JwtTokenUtils {
                 // iat: 언제 발급 되었는지
                 .setIssuedAt(Date.from(now))
                 // exp: 언제 만료 예정인지
-                .setExpiration(Date.from(now.plusSeconds(20L)));
+                .setExpiration(Date.from(now.plusSeconds(60 * 60 * 24 * 7)));
 
 
         /*jwtClaims.put("isAccountExpired", !userDetails.isAccountNonExpired());*/
