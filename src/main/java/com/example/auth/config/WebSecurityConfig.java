@@ -43,13 +43,22 @@ public class WebSecurityConfig {
                                 "/token/validate"
                         )
                         .permitAll()
+
                         .requestMatchers("/users/my-profile")
                         .authenticated()
+
                         .requestMatchers(
                                 "/users/login",
                                 "/users/register"
                         )
                         .anonymous()
+
+                        .requestMatchers("/auth/user-role")
+                        .hasAnyRole("USER", "ADMIN")
+
+                        .requestMatchers("/auth/admin-role")
+                        .hasRole("ADMIN")
+
                         .anyRequest()
                         .permitAll()
                 )
