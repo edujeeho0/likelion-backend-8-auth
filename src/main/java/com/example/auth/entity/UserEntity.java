@@ -23,4 +23,9 @@ public class UserEntity {
 
     private String email;
     private String phone;
+
+    // 테스트를 위해서 문자열 하나에 ','로 구분해 권한을 묘사
+    // ROLE_USER,ROLE_ADMIN,READ_AUTHORITY,WRITE_AUTHORITY
+    private String authorities;
+
 }
