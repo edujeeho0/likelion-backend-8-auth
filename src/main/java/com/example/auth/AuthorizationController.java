@@ -20,4 +20,14 @@ public class AuthorizationController {
     public String adminRole() {
         return "adminRole";
     }
+
+    @GetMapping("/read-authority")
+    public String readAuthority() {
+        return "readAuthority";
+    }
+
+    @GetMapping("/write-authority")
+    public String writeAuthority() {
+        return "writeAuthority";
+    }
 }
