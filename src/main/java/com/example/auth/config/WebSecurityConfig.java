@@ -2,7 +2,6 @@ package com.example.auth.config;
 
 import com.example.auth.jwt.JwtTokenFilter;
 import com.example.auth.jwt.JwtTokenUtils;
-import com.example.auth.service.JpaUserDetailsManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,13 +11,11 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.AuthorizationFilter;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 // @Bean을 비롯해서 여러 설정을 하기 위한 Bean 객체
 @Configuration
@@ -77,6 +74,11 @@ public class WebSecurityConfig {
                         .anyRequest()
                         .permitAll()
                 )
+
+                .oauth2Login(oauth2Login -> oauth2Login
+                        .loginPage("/users/login")
+                )
+
                 // JWT를 사용하기 때문에 보안 관련 세션 해제
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
