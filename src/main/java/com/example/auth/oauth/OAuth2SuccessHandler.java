@@ -53,6 +53,7 @@ public class OAuth2SuccessHandler
                     .username(username)
                     .email(email)
                     .password(providerId)
+                    .authorities("ROLE_USER")
                     .build());
         }
 
